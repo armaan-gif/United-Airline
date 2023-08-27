@@ -1,0 +1,137 @@
+CREATE TABLE InFlight_Satisfaction_Score (
+    flight_number INT,
+    origin_station_code VARCHAR(10),
+    destination_station_code VARCHAR(10),
+    record_locator VARCHAR(20),
+    scheduled_departure_date DATE,
+    question_text VARCHAR(255),
+    score VARCHAR(20),
+    satisfaction_type VARCHAR(1),
+    driver_sub_group1 VARCHAR(50),
+    driver_sub_group2 VARCHAR(50),
+    arrival_delay_minutes INT,
+    arrival_delay_group VARCHAR(20),
+    cabin_code_desc VARCHAR(100),
+    cabin_name VARCHAR(20),
+    entity VARCHAR(20),
+    number_of_legs INT,
+    seat_factor_band VARCHAR(20),
+    loyalty_program_level VARCHAR(50),
+    generation VARCHAR(20),
+    fleet_type_description VARCHAR(50),
+    fleet_usage VARCHAR(20),
+    equipment_type_code VARCHAR(10),
+    ua_uax VARCHAR(10),
+    actual_flown_miles INT,
+    haul_type VARCHAR(20),
+    departure_gate VARCHAR(10),
+    arrival_gate VARCHAR(10),
+    international_domestic_indicator VARCHAR(20),
+    response_group VARCHAR(20),
+    media_provider VARCHAR(50),
+    hub_spoke VARCHAR(20)
+);
+
+CREATE TABLE PreOrder_Data (
+    flight_number INT,
+    departure_station_code VARCHAR(10),
+    arrival_station_code VARCHAR(10),
+    scheduled_departure_dtl DATE,
+    record_locator VARCHAR(20),
+    meal_short_description VARCHAR(50),
+    meal_group VARCHAR(50),
+    meal_category VARCHAR(50),
+    carrier_code VARCHAR(10),
+    cabin_code VARCHAR(20),
+    meal_description VARCHAR(255),
+    is_entree CHAR(1),
+    meal_preorder_quantity INT
+);
+
+CREATE TABLE Customer_Comments (
+    flight_number INT,
+    origin_station_code VARCHAR(10),
+    destination_station_code VARCHAR(10),
+    scheduled_departure_date DATE,
+    arrival_delay_group VARCHAR(20),
+    departure_delay_group VARCHAR(20),
+    entity VARCHAR(20),
+    verbatim_text TEXT,
+    seat_factor_band VARCHAR(20),
+    ques_verbatim_text TEXT,
+    loyalty_program_level VARCHAR(50),
+    fleet_type_description VARCHAR(50),
+    fleet_usage VARCHAR(20),
+    response_group VARCHAR(20)
+);
+
+CREATE TABLE Inventory_Data (
+    flight_number INT,
+    departure_station_code VARCHAR(10),
+    arrival_station_code VARCHAR(10),
+    scheduled_departure_dtl DATE,
+    entree_product_id VARCHAR(20),
+    entree_description VARCHAR(255),
+    entree_code VARCHAR(10),
+    planned_entree_count INT,
+    consumed_entree_count INT
+);
+
+LOAD DATA LOCAL INFILE 'C:\Users\Dell\Downloads\Survey data_Inflight Satisfaction Score.csv'
+INTO TABLE InFlight_Satisfaction_Score
+FIELDS TERMINATED BY ','
+LINES TERMINATED BY '\n'
+IGNORE 1 LINES;
+
+LOAD DATA LOCAL INFILE 'C:\Users\Dell\Downloads\Inflight Service_Pre order data.csv'
+INTO TABLE PreOrder_Data
+FIELDS TERMINATED BY ','
+LINES TERMINATED BY '\n'
+IGNORE 1 LINES; 
+
+LOAD DATA LOCAL INFILE 'C:\Users\Dell\Downloads\Survey data _Customer comments.csv'
+INTO TABLE Customer_Comments
+FIELDS TERMINATED BY ','
+LINES TERMINATED BY '\n'
+IGNORE 1 LINES; 
+
+LOAD DATA LOCAL INFILE 'C:\Users\Dell\Downloads\Inflight Service_Inventory data.csv'
+INTO TABLE Inventory_Data
+FIELDS TERMINATED BY ','
+LINES TERMINATED BY '\n'
+IGNORE 1 LINES; 
+
+select score, count(*)
+from InFlight_Satisfaction_Score
+group by score
+having score < 6 and score > 0
+order by score;
+
+SELECT SUM(CASE WHEN verbatim_text LIKE '%quality%' THEN 1 ELSE 0 END) AS word_count
+FROM Customer_Comments;
+SELECT SUM(CASE WHEN verbatim_text LIKE '%poor%' THEN 1 ELSE 0 END) AS word_count
+FROM Customer_Comments;
+SELECT SUM(CASE WHEN verbatim_text LIKE '%tasteless%' THEN 1 ELSE 0 END) AS word_count
+FROM Customer_Comments;
+SELECT SUM(CASE WHEN verbatim_text LIKE '%stale%' THEN 1 ELSE 0 END) AS word_count
+FROM Customer_Comments;
+SELECT SUM(CASE WHEN verbatim_text LIKE '%bland%' THEN 1 ELSE 0 END) AS word_count
+FROM Customer_Comments;
+SELECT SUM(CASE WHEN verbatim_text LIKE '%would%' THEN 1 ELSE 0 END) AS word_count
+FROM Customer_Comments;
+SELECT SUM(CASE WHEN verbatim_text LIKE '%should%' THEN 1 ELSE 0 END) AS word_count
+FROM Customer_Comments;
+SELECT SUM(CASE WHEN verbatim_text LIKE '%could%' THEN 1 ELSE 0 END) AS word_count
+FROM Customer_Comments;
+SELECT SUM(CASE WHEN verbatim_text LIKE '%soggy%' THEN 1 ELSE 0 END) AS word_count
+FROM Customer_Comments;
+SELECT SUM(CASE WHEN verbatim_text LIKE '%no%' THEN 1 ELSE 0 END) AS word_count
+FROM Customer_Comments;
+SELECT SUM(CASE WHEN verbatim_text LIKE '%disgusting%' THEN 1 ELSE 0 END) AS word_count
+FROM Customer_Comments;
+SELECT SUM(CASE WHEN verbatim_text LIKE '%ineadible%' THEN 1 ELSE 0 END) AS word_count
+FROM Customer_Comments;
+SELECT SUM(CASE WHEN verbatim_text LIKE '%overcooked%' THEN 1 ELSE 0 END) AS word_count
+FROM Customer_Comments;
+SELECT SUM(CASE WHEN verbatim_text LIKE '%burnt%' THEN 1 ELSE 0 END) AS word_count
+FROM Customer_Comments;
